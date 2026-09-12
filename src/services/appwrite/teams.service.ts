@@ -206,6 +206,11 @@ export class TeamsService {
   async registerSolo(
     data: SoloRegistrationDTO,
   ): Promise<EventRegistrationDocument> {
+    throw new AppError(
+      "Registrations for Yantrotsav 2026 events are now officially closed.",
+      "EVENT_REGISTRATION_CLOSED",
+      400,
+    );
     try {
       // 1. Fetch and validate event
       const event = await eventsService.getEventById(data.eventId);
@@ -373,12 +378,20 @@ export class TeamsService {
       // 2. Safely sync student profile attributes (phone, rollNumber, department, etc.) to the users collection
       try {
         const userUpdatePayload: Record<string, any> = {};
-        if (data.studentPhone?.trim()) userUpdatePayload.phone = data.studentPhone.trim();
-        const roll = (data.studentRollNumber || data.studentRollNo || '').trim();
+        const phone = String(data.studentPhone || '').trim();
+        if (phone) userUpdatePayload.phone = phone;
+
+        const roll = String(data.studentRollNumber || data.studentRollNo || '').trim();
         if (roll) userUpdatePayload.rollNumber = roll;
-        if (data.department?.trim()) userUpdatePayload.department = data.department.trim();
-        if (data.semester?.trim()) userUpdatePayload.semester = data.semester.trim();
-        if (data.collegeName?.trim()) userUpdatePayload.college = data.collegeName.trim();
+
+        const dept = String(data.department || '').trim();
+        if (dept) userUpdatePayload.department = dept;
+
+        const sem = String(data.semester || '').trim();
+        if (sem) userUpdatePayload.semester = sem;
+
+        const col = String(data.collegeName || '').trim();
+        if (col) userUpdatePayload.college = col;
 
         if (Object.keys(userUpdatePayload).length > 0 && data.userId) {
           try {
@@ -442,6 +455,11 @@ export class TeamsService {
    * Create a Team and dispatch invitations to prospective members
    */
   async createTeam(data: CreateTeamDTO): Promise<TeamDocument> {
+    throw new AppError(
+      "Registrations for Yantrotsav 2026 events are now officially closed.",
+      "EVENT_REGISTRATION_CLOSED",
+      400,
+    );
     try {
       const event = await eventsService.getEventById(data.eventId);
       await eventsService.assertHasCapacity(event);

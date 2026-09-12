@@ -3,24 +3,20 @@ import { motion, useReducedMotion } from 'framer-motion'
 import EventDetailsModal from '../components/events/EventDetailsModal'
 import GeneralGuidelines from '../pages/GeneralGuidelines'
 import {
-  ArrowDownRight,
-  ArrowUpRight,
   CalendarDays,
   Filter,
   CheckCircle2,
-  Zap,
   ShieldAlert,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import fallbackBanner from '../assets/images/event-fallback.jpg'
-import EventRegistrationModal from '../components/events/EventRegistrationModal'
 import CyberLoader from '../components/common/CyberLoader'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { fetchEventsThunk } from '../store/slices/eventsSlice'
 import { useAuth } from '../context/AuthContext'
 import { teamsService, MAX_EVENT_REGISTRATIONS_PER_USER } from '../services/appwrite/teams.service'
 import type { EventDocument } from '../types/database.types'
-import { isEventFullyBooked, isEventDeadlinePassed, getEventSeatsSummary } from '../utils/eventCapacity'
+import { isEventFullyBooked, getEventSeatsSummary } from '../utils/eventCapacity'
 
 const CATEGORIES: { label: string; value: string }[] = [
   { label: 'ALL EVENTS', value: 'all' },
@@ -38,10 +34,6 @@ function Events() {
   const { events, status } = useAppSelector((state) => state.events)
 
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [selectedEvent, setSelectedEvent] = useState<EventDocument | null>(
-    null
-  )
-  const [modalOpen, setModalOpen] = useState(false)
   const [guidelinesOpen, setGuidelinesOpen] = useState(false)
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [detailsEvent, setDetailsEvent] = useState<EventDocument | null>(null)
@@ -153,13 +145,6 @@ function Events() {
     })
   }, [events])
 
-  const handleOpenRegistration = (event: EventDocument) => {
-    if (isEventFullyBooked(event) || isEventDeadlinePassed(event)) return
-
-    setSelectedEvent(event)
-    setModalOpen(true)
-  }
-
   const reveal = {
     hidden: shouldReduceMotion
       ? { opacity: 1 }
@@ -252,9 +237,9 @@ function Events() {
           <span className="absolute bottom-0 right-0 h-2 w-2 border-b-2 border-r-2 border-[#00E5FF]" />
 
           {/* Badge indicator */}
-          <div className="mr-3 sm:mr-4 flex shrink-0 items-center gap-2 border border-[#FF6B00]/40 bg-[#FF6B00]/10 px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-[#FF6B00]">
-            <Zap size={12} className="animate-pulse" />
-            <span>MAX 3 EVENTS</span>
+          <div className="mr-3 sm:mr-4 flex shrink-0 items-center gap-2 border border-red-500/50 bg-red-950/30 px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-red-400">
+            <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+            <span>REGISTRATIONS CLOSED</span>
           </div>
 
           {/* Simple Marquee Ticker */}
@@ -262,16 +247,16 @@ function Events() {
             <div className="animate-cyber-marquee whitespace-nowrap py-0.5">
               {[...Array(2)].map((_, idx) => (
                 <div key={idx} className="flex items-center gap-6 pr-6 font-mono text-[11px] tracking-[0.12em] text-slate-300">
-                  <span className="text-[#00E5FF] font-semibold">
-                    Each student can register for a maximum of 3 events only (Solo + Team combined).
+                  <span className="text-red-400 font-semibold">
+                    Online registrations for all Yantrotsav 2026 events are now officially closed.
                   </span>
                   <span className="text-white/30">•</span>
                   <span className="text-slate-300">
-                    Choose your events carefully across tech, robotics, gaming & coding!
+                    Existing participants can access their squads and passes in the Student Dashboard.
                   </span>
                   <span className="text-white/30">•</span>
                   <span className="text-slate-400">
-                    You can view and manage all your registered events anytime in your Student Dashboard.
+                    For any support or queries, please reach out to the organizing team.
                   </span>
                   <span className="text-white/30">•</span>
                 </div>
@@ -762,10 +747,14 @@ function Events() {
                             )
                           })()}
 
-                          {enrolledEventIds.has(event.$id) && (
+                          {enrolledEventIds.has(event.$id) ? (
                             <span className="flex items-center gap-1 border border-emerald-500/60 bg-emerald-950/40 px-2.5 py-1 font-mono text-[8px] font-bold uppercase tracking-[0.18em] text-emerald-400">
                               <CheckCircle2 size={10} />
                               ENROLLED ✓
+                            </span>
+                          ) : (
+                            <span className="border border-red-500/50 bg-red-950/40 px-2.5 py-1 font-mono text-[8px] font-bold uppercase tracking-[0.18em] text-red-400">
+                              REGISTRATION CLOSED
                             </span>
                           )}
                         </div>
@@ -896,15 +885,6 @@ function Events() {
 
                         {/* FOOTER ACTION */}
                         {(() => {
-                          const isDeadlinePassed = isEventDeadlinePassed(event)
-
-                          const isFullyBooked = isEventFullyBooked(event)
-
-                          const isRegistrationOpen =
-                            event.status === 'published' &&
-                            !isDeadlinePassed &&
-                            !isFullyBooked
-
                           return (
                             <div className="mt-7 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                               <div className="flex items-center gap-3">
@@ -912,9 +892,7 @@ function Events() {
                                   className={`h-1.5 w-1.5 ${
                                     enrolledEventIds.has(event.$id)
                                       ? 'bg-emerald-400'
-                                      : isRegistrationOpen
-                                        ? 'animate-pulse bg-emerald-400'
-                                        : 'bg-red-400'
+                                      : 'bg-red-400'
                                   }`}
                                 />
 
@@ -922,20 +900,12 @@ function Events() {
                                   className={`font-mono text-[9px] uppercase tracking-[0.2em] ${
                                     enrolledEventIds.has(event.$id)
                                       ? 'text-emerald-400'
-                                      : isRegistrationOpen
-                                        ? 'text-emerald-400'
-                                        : 'text-red-400'
+                                      : 'text-red-400'
                                   }`}
                                 >
                                   {enrolledEventIds.has(event.$id)
                                     ? 'Registered'
-                                    : isRegistrationOpen
-                                      ? 'Registration Active'
-                                      : isFullyBooked
-                                        ? 'Completely Booked'
-                                        : isDeadlinePassed
-                                          ? 'Deadline Passed'
-                                          : 'Registration Closed'}
+                                    : 'Registration Closed'}
                                 </span>
                               </div>
 
@@ -959,43 +929,15 @@ function Events() {
                                     <CheckCircle2 size={13} />
                                     <span>Already Enrolled ✓</span>
                                   </Link>
-                                ) : isRegistrationOpen ? (
-                                  enrolledEventIds.size >= MAX_EVENT_REGISTRATIONS_PER_USER ? (
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        handleOpenRegistration(event)
-                                      }
-                                      className="flex cursor-pointer items-center justify-center gap-2 border border-amber-500/70 bg-amber-500/10 px-5 py-3 text-[9px] font-bold uppercase tracking-[0.18em] text-amber-400 transition-all hover:bg-amber-500 hover:text-black"
-                                    >
-                                      <ShieldAlert size={13} />
-                                      <span>Quota Limit (3/3)</span>
-                                    </button>
-                                  ) : (
-                                    <button
-                                      type="button"
-                                      onClick={() =>
-                                        handleOpenRegistration(event)
-                                      }
-                                      className="flex cursor-pointer items-center justify-center gap-3 border border-[#00E5FF] bg-[#00E5FF]/10 px-5 py-3 text-[9px] font-bold uppercase tracking-[0.18em] text-[#00E5FF] transition-all hover:bg-[#00E5FF] hover:text-black"
-                                    >
-                                      <span>Register Now</span>
-
-                                      {isReversed ? (
-                                        <ArrowUpRight size={14} />
-                                      ) : (
-                                        <ArrowDownRight size={14} />
-                                      )}
-                                    </button>
-                                  )
                                 ) : (
-                                  <span className="border border-white/10 px-4 py-2 font-mono text-[9px] uppercase tracking-wider text-slate-500">
-                                    {isDeadlinePassed
-                                      ? 'Deadline Passed'
-                                      : isFullyBooked
-                                        ? 'Completely Booked'
-                                        : 'Registrations Closed'}
-                                  </span>
+                                  <button
+                                    type="button"
+                                    disabled
+                                    className="flex cursor-not-allowed items-center justify-center gap-2 border border-red-500/50 bg-red-950/40 px-5 py-3 text-[9px] font-bold uppercase tracking-[0.18em] text-red-400 opacity-90 shadow-[0_0_10px_rgba(239,68,68,0.1)]"
+                                  >
+                                    <ShieldAlert size={13} />
+                                    <span>Registration Closed</span>
+                                  </button>
                                 )}
                               </div>
                             </div>
@@ -1035,20 +977,6 @@ function Events() {
           onClose={() => setGuidelinesOpen(false)}
         />
       )}
-
-      {/* ========================================================= */}
-      {/* REGISTRATION MODAL */}
-      {/* ========================================================= */}
-
-      <EventRegistrationModal
-        event={selectedEvent}
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onSuccess={() => {
-          dispatch(fetchEventsThunk({ force: true }))
-          refreshEnrollments()
-        }}
-      />
 
       {/* ========================================================= */}
       {/* DETAILS MODAL */}

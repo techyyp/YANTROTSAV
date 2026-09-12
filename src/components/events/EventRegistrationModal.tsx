@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import type { FormEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Users, User, Plus, Trash2, CheckCircle2, AlertCircle, ShieldAlert, Loader2, ArrowRight } from 'lucide-react'
+import { X, User, Plus, Trash2, CheckCircle2, AlertCircle, ShieldAlert, Loader2, ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { teamsService, MAX_EVENT_REGISTRATIONS_PER_USER } from '../../services/appwrite/teams.service'
 import type { EventDocument } from '../../types/database.types'
 import { showToast } from '../../utils/toast'
-import { isEventFullyBooked, isEventDeadlinePassed, getEventSeatsSummary } from '../../utils/eventCapacity'
+import { isEventFullyBooked, getEventSeatsSummary } from '../../utils/eventCapacity'
 
 export interface EventRegistrationModalProps {
   event: EventDocument | null
@@ -105,10 +105,9 @@ export default function EventRegistrationModal({
   if (!isOpen || !event) return null
 
   const isTeamEvent = (event.eventType || event.format) === 'team' || (event.minTeamSize || 1) > 1
-  const isDeadlinePassed = isEventDeadlinePassed(event)
   const seats = getEventSeatsSummary(event)
   const isFullyBooked = isEventFullyBooked(event)
-  const isRegistrationClosed = event.status !== 'published' || isDeadlinePassed || isFullyBooked
+  const isRegistrationClosed = true
   const isLimitReached = !existingEnrollment?.enrolled && userRegisteredCount >= MAX_EVENT_REGISTRATIONS_PER_USER
   const requiredAdditionalMembers = Math.max(1, (event.minTeamSize || 2) - 1)
   const maxAdditionalMembers = Math.max(1, (event.maxTeamSize || 4) - 1)
@@ -133,6 +132,11 @@ export default function EventRegistrationModal({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (isSubmittingRef.current) return
+
+    if (isRegistrationClosed) {
+      showToast.info('Registrations for Yantrotsav 2026 events are now officially closed.')
+      return
+    }
 
     if (!user) {
       openAuthModal('login')
@@ -442,14 +446,10 @@ export default function EventRegistrationModal({
                 </div>
 
                 {isRegistrationClosed && (
-                  <div className="flex items-center gap-3 border border-amber-500/40 bg-amber-950/30 p-3 text-xs text-amber-400">
+                  <div className="flex items-center gap-3 border border-red-500/50 bg-red-950/40 p-3 text-xs text-red-400">
                     <AlertCircle size={16} className="shrink-0" />
                     <span>
-                      {isDeadlinePassed
-                        ? 'Registration deadline has passed for this event. New registrations cannot be submitted.'
-                        : isFullyBooked
-                          ? 'This event is completely booked. New registrations cannot be submitted.'
-                          : 'Registration is currently closed for this event.'}
+                      Online registrations for all Yantrotsav 2026 events are now officially closed.
                     </span>
                   </div>
                 )}
@@ -671,26 +671,10 @@ export default function EventRegistrationModal({
                 <button
                   type="submit"
                   disabled={loading || isRegistrationClosed}
-                  className="mt-6 flex w-full items-center justify-center gap-2 border border-[#00E5FF] bg-[#00E5FF] py-3 text-xs font-black uppercase tracking-[0.18em] text-black transition-all hover:bg-transparent hover:text-[#00E5FF] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="mt-6 flex w-full items-center justify-center gap-2 border border-red-500/50 bg-red-950/40 py-3 text-xs font-black uppercase tracking-[0.18em] text-red-400 cursor-not-allowed opacity-90 shadow-[0_0_15px_rgba(239,68,68,0.15)]"
                 >
-                  {loading ? (
-                    <>
-                      <Loader2 size={16} className="animate-spin" />
-                      <span>Transmitting Registration...</span>
-                    </>
-                  ) : isRegistrationClosed ? (
-                    <span>{isDeadlinePassed ? 'Registration Deadline Passed' : 'Registration Closed'}</span>
-                  ) : isTeamEvent ? (
-                    <>
-                      <Users size={16} />
-                      <span>Deploy Team & Register</span>
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircle2 size={16} />
-                      <span>Confirm Solo Registration</span>
-                    </>
-                  )}
+                  <ShieldAlert size={16} />
+                  <span>Registration Closed</span>
                 </button>
               </form>
             )}
