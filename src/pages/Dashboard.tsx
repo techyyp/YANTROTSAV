@@ -394,7 +394,7 @@ export default function Dashboard() {
             Registrations Closed
           </h2>
           <p className="mt-3 text-xs leading-relaxed text-slate-400">
-            Online registrations are officially closed. No further registrations will be accepted. For official queries, please contact the CSE Organizing Committee.
+            Online registrations are officially closed. No further registrations will be accepted. For official queries, please contact the organising team.
           </p>
 
           <button

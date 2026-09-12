@@ -188,7 +188,7 @@ function Home() {
                       </span>
                       <span className="text-[#FF6B00] font-black">///</span>
                       <span className="text-slate-300">
-                        For Official Queries, Please Contact the CSE Organizing Committee
+                        For Official Queries, Please Contact the Organising Team
                       </span>
                       <span className="text-[#FF6B00] font-black">///</span>
                     </div>
