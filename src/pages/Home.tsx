@@ -6,6 +6,7 @@ import {
   FaQuestionCircle,
   FaLightbulb,
 } from 'react-icons/fa';
+import { ShieldAlert } from 'lucide-react';
 import { useEffect } from 'react';
 const images = import.meta.glob(
   '../assets/images/*',
@@ -157,19 +158,51 @@ function Home() {
         <div className="pointer-events-none absolute -right-40 bottom-1/4 h-96 w-96 rounded-full bg-[#FF6B00]/10 blur-[120px]" />
 
         <div className="relative mx-auto mt-26 max-w-[1400px] px-5 md:px-8">
-          {/* Section Tag */}
-          {/* <div className="mb-6 flex items-center gap-3">
-            <span className="font-mono text-[10px] tracking-[0.25em] text-[#FF6B00] font-bold">
-              01
-            </span>
-            <span className="h-px w-10 bg-[#FF6B00]" />
-            <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.25em] text-slate-400">
-              About The Event / Fest Overview
-            </span>
-          </div> */}
+          {/* ========================================================= */}
+          {/* EMERGENCY HERO MARQUEE BANNER: REGISTRATIONS CLOSED */}
+          {/* ========================================================= */}
+          <div className="relative mb-8 sm:mb-12 overflow-hidden border-2 border-red-500/60 bg-gradient-to-r from-red-950/70 via-[#1a0505]/90 to-red-950/70 p-2.5 sm:p-3.5 shadow-[0_0_40px_rgba(239,68,68,0.25)] backdrop-blur-md">
+            {/* Cyberpunk corner brackets */}
+            <span className="absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-red-500" />
+            <span className="absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 border-red-500" />
+            <span className="absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 border-red-500" />
+            <span className="absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-red-500" />
 
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+              {/* Emergency Status Badge */}
+              <div className="flex shrink-0 items-center gap-2 border border-red-500 bg-red-600 px-3.5 py-1.5 font-mono text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-white shadow-[0_0_20px_rgba(239,68,68,0.6)]">
+                <ShieldAlert size={16} className="animate-pulse shrink-0" />
+                <span>REGISTRATIONS CLOSED</span>
+              </div>
 
-
+              {/* Scrolling Emergency Marquee */}
+              <div className="relative w-full flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent)]">
+                <div className="animate-cyber-marquee whitespace-nowrap py-1">
+                  {[...Array(2)].map((_, idx) => (
+                    <div key={idx} className="flex items-center gap-8 pr-8 font-mono text-xs sm:text-sm tracking-[0.14em]">
+                      <span className="text-red-400 font-bold uppercase tracking-[0.18em] flex items-center gap-2">
+                        <span className="h-2.5 w-2.5 rounded-full bg-red-500 animate-ping inline-block" />
+                        Online Registrations Are Officially Closed
+                      </span>
+                      <span className="text-red-500 font-black">///</span>
+                      <span className="text-white font-semibold">
+                        Backend &amp; Portal Sessions Suspended Due to Security Maintenance
+                      </span>
+                      <span className="text-red-500 font-black">///</span>
+                      <span className="text-amber-400 font-bold">
+                        No Further Student Registrations or Event Entries Entertained
+                      </span>
+                      <span className="text-red-500 font-black">///</span>
+                      <span className="text-slate-300">
+                        For official queries, please contact the CSE Organizing Committee
+                      </span>
+                      <span className="text-red-500 font-black">///</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Two-Column Hero Showcase */}
           <div className="grid items-center gap-12 mb-6 lg:grid-cols-12 lg:gap-16">
@@ -187,6 +220,12 @@ function Home() {
               <h2 className="text-4xl font-black uppercase tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
                 YANTROTSAV <span className="text-[#00E5FF]">2026</span>
               </h2>
+
+              {/* Closed Status Pill */}
+              <div className="mt-4 inline-flex items-center gap-2 border border-red-500/50 bg-red-950/40 px-3.5 py-1.5 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+                <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+                <span>Portal Status: Registrations Closed / System Offline</span>
+              </div>
 
               <div className="mt-4 flex items-center gap-3 sm:mt-6">
                 <span className="h-2 w-2 rounded-full bg-[#FF6B00]" />

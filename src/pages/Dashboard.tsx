@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   XCircle,
   AlertCircle,
+  ShieldAlert,
   Loader2,
   ArrowRight,
   ShieldCheck,
@@ -38,7 +39,7 @@ export default function Dashboard() {
    useEffect(() => {
     document.title = 'YANTROTSAV | Dashboard'
   }, [])
-  const { user, profile, openAuthModal, loading: authLoading, updateProfile } = useAuth()
+  const { user, profile, loading: authLoading, updateProfile } = useAuth()
 
   const [invitations, setInvitations] = useState<TeamInvitationDocument[]>([])
   const [registrations, setRegistrations] = useState<EventRegistrationDocument[]>([])
@@ -393,15 +394,16 @@ export default function Dashboard() {
             Participant Login Required
           </h2>
           <p className="mt-3 text-xs leading-relaxed text-slate-400">
-            Please sign in to view your registered events, track team formation, edit your profile, and accept pending invitations.
+            Participant logins and session creations are temporarily suspended due to server security maintenance.
           </p>
 
           <button
-            onClick={() => openAuthModal('login')}
-            className="mt-6 inline-flex items-center gap-2 border border-[#00E5FF] bg-[#00E5FF] px-6 py-3 font-mono text-xs font-black uppercase tracking-[0.18em] text-black transition-all hover:bg-transparent hover:text-[#00E5FF]"
+            type="button"
+            disabled
+            className="mt-6 inline-flex items-center gap-2 border border-red-500/50 bg-red-950/40 px-6 py-3 font-mono text-xs font-black uppercase tracking-[0.18em] text-red-400 cursor-not-allowed opacity-85 shadow-[0_0_15px_rgba(239,68,68,0.15)]"
           >
-            <span>Sign In to Dashboard</span>
-            <ArrowRight size={14} />
+            <ShieldAlert size={14} />
+            <span>Portal Closed / Maintenance</span>
           </button>
         </div>
       </div>

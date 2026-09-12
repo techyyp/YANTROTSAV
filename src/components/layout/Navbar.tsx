@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, User, LogOut } from 'lucide-react'
+import { Menu, X, User, LogOut, ShieldAlert } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import logo from "../../assets/images/logo.png";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const location = useLocation()
-  const { user, profile, isAdmin, openAuthModal, logout } = useAuth()
+  const { user, profile, isAdmin, logout } = useAuth()
 
   const closeMenu = () => setIsOpen(false)
 
@@ -134,11 +134,12 @@ function Navbar() {
               </div>
             ) : (
               <button
-                onClick={() => openAuthModal('login')}
-                className="flex items-center gap-2 border border-[#FF6B00] bg-[#FF6B00] px-4 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-white transition-all hover:bg-transparent hover:text-[#FF6B00]"
+                type="button"
+                disabled
+                className="flex items-center gap-2 border border-red-500/50 bg-red-950/40 px-3.5 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-red-400 cursor-not-allowed opacity-85 shadow-[0_0_10px_rgba(239,68,68,0.15)]"
               >
-                <User size={12} />
-                <span>Login/SignUp</span>
+                <ShieldAlert size={12} />
+                <span>Portal Closed</span>
               </button>
             )}
           </div>
@@ -216,14 +217,12 @@ function Navbar() {
 
             {!user && (
               <button
-                onClick={() => {
-                  closeMenu()
-                  openAuthModal('login')
-                }}
-                className="mt-5 flex w-full items-center justify-center gap-2 border border-[#FF6B00] bg-[#FF6B00] py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-white"
+                type="button"
+                disabled
+                className="mt-5 flex w-full items-center justify-center gap-2 border border-red-500/50 bg-red-950/40 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-red-400 cursor-not-allowed opacity-85 shadow-[0_0_15px_rgba(239,68,68,0.15)]"
               >
-                <User size={14} />
-                <span>Login/SignUp</span>
+                <ShieldAlert size={14} />
+                <span>Portal Closed / Maintenance</span>
               </button>
             )}
           </div>

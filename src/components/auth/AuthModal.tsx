@@ -7,10 +7,10 @@ import {
   Mail,
   User,
   Phone,
-  Loader2,
   Eye,
   EyeOff,
   AtSign,
+  ShieldAlert,
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { DEPARTMENT_OPTIONS, SEMESTER_OPTIONS } from '../../types/database.types'
@@ -63,6 +63,8 @@ export default function AuthModal() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
+    showToast.error('Portal access and session creation are temporarily disabled due to system security maintenance.')
+    return
 
     try {
       if (authModalMode === 'login') {
@@ -87,7 +89,7 @@ export default function AuthModal() {
         const normalizedPhone = normalizeMobile(phone)
         const contactError = getContactError(normalizedEmail, normalizedPhone)
         if (contactError) {
-          showToast.warning(contactError)
+          showToast.warning(contactError!)
           return
         }
         if (!password) {
@@ -105,7 +107,7 @@ export default function AuthModal() {
         const normalizedUsername = normalizeUsername(username)
         const usernameError = getUsernameError(normalizedUsername)
         if (usernameError) {
-          showToast.warning(usernameError)
+          showToast.warning(usernameError!)
           return
         }
         if (!rollNo.trim()) {
@@ -135,9 +137,9 @@ export default function AuthModal() {
         resetForm()
         closeAuthModal()
       }
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        const msg = err.message
+    } catch (err: any) {
+      if (err instanceof Error || (err && err.message)) {
+        const msg = err.message || ''
         if (authModalMode === 'register') {
           if (msg.toLowerCase().includes('roll') || msg.toLowerCase().includes('idx_rollnumber')) {
             showToast.error('A student with this Roll Number is already registered.')
@@ -482,21 +484,21 @@ export default function AuthModal() {
               )}
             </div>
 
+              {/* Emergency Security Notice */}
+              <div className="mt-4 flex items-center gap-2 border border-red-500/50 bg-red-950/40 p-3 text-xs text-red-400">
+                <ShieldAlert size={16} className="shrink-0" />
+                <span>
+                  Portal access and account sessions are temporarily disabled due to emergency backend security maintenance.
+                </span>
+              </div>
+
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="mt-6 flex w-full items-center justify-center gap-2 border border-[#FF6B00] bg-[#FF6B00] py-3 text-xs font-black uppercase tracking-[0.18em] text-white transition-all hover:bg-transparent hover:text-[#FF6B00] disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={isSubmitting || true}
+                className="mt-4 flex w-full items-center justify-center gap-2 border border-red-500/50 bg-red-950/40 py-3 text-xs font-black uppercase tracking-[0.18em] text-red-400 cursor-not-allowed opacity-80 shadow-[0_0_15px_rgba(239,68,68,0.15)]"
               >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 size={16} className="animate-spin" />
-                    <span>Processing...</span>
-                  </>
-                ) : authModalMode === 'login' ? (
-                  'Access Portal'
-                ) : (
-                  'Generate Identity Pass'
-                )}
+                <ShieldAlert size={16} />
+                <span>Portal Closed / Maintenance</span>
               </button>
             </form>
           </div>

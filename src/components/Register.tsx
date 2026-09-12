@@ -15,6 +15,7 @@ import {
   Eye,
   EyeOff,
   AtSign,
+  ShieldAlert,
 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authService } from '../services/appwrite/auth.service'
@@ -65,12 +66,8 @@ export default function Register() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-
-    // Basic frontend validation
-    if (!formData.fullName.trim() || !formData.email.trim() || !formData.password) {
-      showToast.warning('Please fill in your Full Name, Email, and Password.')
-      return
-    }
+    showToast.error('Student registration and account creation are closed due to server security maintenance.')
+    return
 
     if (formData.password.length < 8) {
       showToast.warning('Password must contain at least 8 characters.')
@@ -85,7 +82,7 @@ export default function Register() {
     const username = normalizeUsername(formData.username || '')
     const usernameError = getUsernameError(username)
     if (usernameError) {
-      showToast.warning(usernameError)
+      showToast.warning(usernameError!)
       return
     }
 
@@ -98,7 +95,7 @@ export default function Register() {
     const phone = normalizeMobile(formData.phone)
     const contactError = getContactError(email, phone)
     if (contactError) {
-      showToast.warning(contactError)
+      showToast.warning(contactError!)
       return
     }
 
@@ -132,10 +129,10 @@ export default function Register() {
       await refreshUser()
       showToast.success(`Welcome to Yantrotsav, ${formData.fullName}! Your registration is complete.`)
       setSuccess(true)
-    } catch (err: unknown) {
-      if (err instanceof Error) {
+    } catch (err: any) {
+      if (err instanceof Error || (err && err.message)) {
         // Friendly mapping for duplicate rollNumber, email, or other unique constraints
-        const msg = err.message
+        const msg = err.message || ''
         if (msg.toLowerCase().includes('roll') || msg.toLowerCase().includes('idx_rollnumber')) {
           showToast.error('A student with this Roll Number is already registered for Yantrotsav.')
         } else if (msg.toLowerCase().includes('email') || msg.toLowerCase().includes('user_already_exists')) {
@@ -458,23 +455,22 @@ export default function Register() {
                 </div>
               )}
 
+              {/* Emergency Security Alert Banner */}
+              <div className="mt-6 flex items-center gap-3 border border-red-500/50 bg-red-950/40 p-3.5 text-xs text-red-400">
+                <ShieldAlert size={18} className="shrink-0" />
+                <span>
+                  Portal account creation and registrations are officially closed due to scheduled server maintenance.
+                </span>
+              </div>
+
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="mt-6 flex w-full items-center justify-center gap-2 border border-[#FF6B00] bg-[#FF6B00] py-3.5 font-mono text-xs font-black uppercase tracking-[0.18em] text-white transition-all hover:bg-transparent hover:text-[#FF6B00] disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={isSubmitting || true}
+                className="mt-4 flex w-full items-center justify-center gap-2 border border-red-500/50 bg-red-950/40 py-3.5 font-mono text-xs font-black uppercase tracking-[0.18em] text-red-400 cursor-not-allowed opacity-85 shadow-[0_0_15px_rgba(239,68,68,0.15)]"
               >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 size={16} className="animate-spin" />
-                    <span>Creating Account...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Complete Registration</span>
-                    <ArrowRight size={14} />
-                  </>
-                )}
+                <ShieldAlert size={14} />
+                <span>Registrations Closed</span>
               </button>
 
               <div className="text-center font-mono text-[10px] text-slate-500">

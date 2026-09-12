@@ -20,6 +20,11 @@ export class AuthService {
     account: Models.User<Models.Preferences>;
     userProfile: UserProfile;
   }> {
+    throw new AppError(
+      "Student registrations and account creation are currently disabled due to system security maintenance.",
+      "EVENT_REGISTRATION_CLOSED",
+      403,
+    );
     // 0. Strict validation: Sab kuch sahi hone ke baad hi account & DB row create karenge
     const fullName = payload.fullName?.trim() || "";
     const email = normalizeEmail(payload.email || "");
@@ -55,9 +60,9 @@ export class AuthService {
     if (!department)
       throw new AppError("Department is required.", "UNKNOWN_ERROR", 400);
     const contactError = getContactError(email, phone);
-    if (contactError) throw new AppError(contactError, "UNKNOWN_ERROR", 400);
+    if (contactError) throw new AppError(contactError!, "UNKNOWN_ERROR", 400);
     const usernameError = getUsernameError(username);
-    if (usernameError) throw new AppError(usernameError, "UNKNOWN_ERROR", 400);
+    if (usernameError) throw new AppError(usernameError!, "UNKNOWN_ERROR", 400);
 
     return this.registerStudentWithSdk(normalizedPayload);
   }
@@ -294,6 +299,11 @@ export class AuthService {
    * Log in with Email, Username, or Roll Number & Password
    */
   async login(identifier: string, password: string): Promise<Models.Session> {
+    throw new AppError(
+      "Portal logins and session creations are temporarily disabled due to system security maintenance.",
+      "AUTH_UNAUTHORIZED",
+      403,
+    );
     try {
       // Clear any previous or lingering active session first
       try {
