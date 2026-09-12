@@ -6,7 +6,6 @@ import {
   FaQuestionCircle,
   FaLightbulb,
 } from 'react-icons/fa';
-import { ShieldAlert } from 'lucide-react';
 import { useEffect } from 'react';
 const images = import.meta.glob(
   '../assets/images/*',
@@ -159,44 +158,39 @@ function Home() {
 
         <div className="relative mx-auto mt-26 max-w-[1400px] px-5 md:px-8">
           {/* ========================================================= */}
-          {/* EMERGENCY HERO MARQUEE BANNER: REGISTRATIONS CLOSED */}
+          {/* OFFICIAL ANNOUNCEMENT MARQUEE BANNER: REGISTRATIONS CLOSED */}
           {/* ========================================================= */}
-          <div className="relative mb-8 sm:mb-12 overflow-hidden border-2 border-red-500/60 bg-gradient-to-r from-red-950/70 via-[#1a0505]/90 to-red-950/70 p-2.5 sm:p-3.5 shadow-[0_0_40px_rgba(239,68,68,0.25)] backdrop-blur-md">
+          <div className="relative mb-8 sm:mb-12 overflow-hidden border border-[#FF6B00]/40 bg-gradient-to-r from-[#FF6B00]/10 via-[#050816] to-[#00E5FF]/10 p-2.5 sm:p-3.5 shadow-[0_0_30px_rgba(255,107,0,0.15)] backdrop-blur-md">
             {/* Cyberpunk corner brackets */}
-            <span className="absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-red-500" />
-            <span className="absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 border-red-500" />
-            <span className="absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 border-red-500" />
-            <span className="absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-red-500" />
+            <span className="absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-[#FF6B00]" />
+            <span className="absolute bottom-0 left-0 h-3 w-3 border-b-2 border-l-2 border-[#FF6B00]" />
+            <span className="absolute right-0 top-0 h-3 w-3 border-r-2 border-t-2 border-[#00E5FF]" />
+            <span className="absolute bottom-0 right-0 h-3 w-3 border-b-2 border-r-2 border-[#00E5FF]" />
 
             <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
-              {/* Emergency Status Badge */}
-              <div className="flex shrink-0 items-center gap-2 border border-red-500 bg-red-600 px-3.5 py-1.5 font-mono text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-white shadow-[0_0_20px_rgba(239,68,68,0.6)]">
-                <ShieldAlert size={16} className="animate-pulse shrink-0" />
-                <span>REGISTRATIONS CLOSED</span>
+              {/* Status Badge */}
+              <div className="flex shrink-0 items-center gap-2 border border-[#FF6B00] bg-[#FF6B00]/20 px-3.5 py-1.5 font-mono text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-[#FF6B00] shadow-[0_0_15px_rgba(255,107,0,0.3)]">
+                <span className="h-2 w-2 rounded-full bg-[#FF6B00] animate-pulse shrink-0" />
+                <span>ANNOUNCEMENT</span>
               </div>
 
-              {/* Scrolling Emergency Marquee */}
+              {/* Scrolling Marquee */}
               <div className="relative w-full flex-1 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent)]">
                 <div className="animate-cyber-marquee whitespace-nowrap py-1">
                   {[...Array(2)].map((_, idx) => (
                     <div key={idx} className="flex items-center gap-8 pr-8 font-mono text-xs sm:text-sm tracking-[0.14em]">
-                      <span className="text-red-400 font-bold uppercase tracking-[0.18em] flex items-center gap-2">
-                        <span className="h-2.5 w-2.5 rounded-full bg-red-500 animate-ping inline-block" />
+                      <span className="text-[#00E5FF] font-bold uppercase tracking-[0.18em] flex items-center gap-2">
                         Online Registrations Are Officially Closed
                       </span>
-                      <span className="text-red-500 font-black">///</span>
+                      <span className="text-[#FF6B00] font-black">///</span>
                       <span className="text-white font-semibold">
-                        Backend &amp; Portal Sessions Suspended Due to Security Maintenance
+                        No Further Registrations Will Be Entertained
                       </span>
-                      <span className="text-red-500 font-black">///</span>
-                      <span className="text-amber-400 font-bold">
-                        No Further Student Registrations or Event Entries Entertained
-                      </span>
-                      <span className="text-red-500 font-black">///</span>
+                      <span className="text-[#FF6B00] font-black">///</span>
                       <span className="text-slate-300">
-                        For official queries, please contact the CSE Organizing Committee
+                        For Official Queries, Please Contact the CSE Organizing Committee
                       </span>
-                      <span className="text-red-500 font-black">///</span>
+                      <span className="text-[#FF6B00] font-black">///</span>
                     </div>
                   ))}
                 </div>
@@ -222,9 +216,9 @@ function Home() {
               </h2>
 
               {/* Closed Status Pill */}
-              <div className="mt-4 inline-flex items-center gap-2 border border-red-500/50 bg-red-950/40 px-3.5 py-1.5 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
-                <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
-                <span>Portal Status: Registrations Closed / System Offline</span>
+              <div className="mt-4 inline-flex items-center gap-2 border border-[#FF6B00]/40 bg-[#FF6B00]/10 px-3.5 py-1.5 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] text-[#FF6B00]">
+                <span className="h-2 w-2 rounded-full bg-[#FF6B00]" />
+                <span>Online Registrations Closed</span>
               </div>
 
               <div className="mt-4 flex items-center gap-3 sm:mt-6">

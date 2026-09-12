@@ -15,7 +15,6 @@ import {
   Eye,
   EyeOff,
   AtSign,
-  ShieldAlert,
 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authService } from '../services/appwrite/auth.service'
@@ -66,7 +65,7 @@ export default function Register() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    showToast.error('Student registration and account creation are closed due to server security maintenance.')
+    showToast.error('Online registrations are officially closed. No further registrations will be accepted.')
     return
 
     if (formData.password.length < 8) {
@@ -455,11 +454,11 @@ export default function Register() {
                 </div>
               )}
 
-              {/* Emergency Security Alert Banner */}
-              <div className="mt-6 flex items-center gap-3 border border-red-500/50 bg-red-950/40 p-3.5 text-xs text-red-400">
-                <ShieldAlert size={18} className="shrink-0" />
+              {/* Closed Notice Banner */}
+              <div className="mt-6 flex items-center gap-3 border border-amber-500/40 bg-amber-950/30 p-3.5 text-xs text-amber-300">
+                <Lock size={18} className="shrink-0" />
                 <span>
-                  Portal account creation and registrations are officially closed due to scheduled server maintenance.
+                  Online registrations are officially closed. No further registrations will be accepted. For queries, please contact the organizing team.
                 </span>
               </div>
 
@@ -467,9 +466,9 @@ export default function Register() {
               <button
                 type="submit"
                 disabled={isSubmitting || true}
-                className="mt-4 flex w-full items-center justify-center gap-2 border border-red-500/50 bg-red-950/40 py-3.5 font-mono text-xs font-black uppercase tracking-[0.18em] text-red-400 cursor-not-allowed opacity-85 shadow-[0_0_15px_rgba(239,68,68,0.15)]"
+                className="mt-4 flex w-full items-center justify-center gap-2 border border-white/15 bg-white/5 py-3.5 font-mono text-xs font-black uppercase tracking-[0.18em] text-slate-400 cursor-not-allowed opacity-80"
               >
-                <ShieldAlert size={14} />
+                <Lock size={14} />
                 <span>Registrations Closed</span>
               </button>
 

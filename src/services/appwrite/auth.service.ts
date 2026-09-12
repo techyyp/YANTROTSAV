@@ -21,7 +21,7 @@ export class AuthService {
     userProfile: UserProfile;
   }> {
     throw new AppError(
-      "Student registrations and account creation are currently disabled due to system security maintenance.",
+      "Online registrations are officially closed. No further registrations will be accepted. For any queries, please contact the organizing team.",
       "EVENT_REGISTRATION_CLOSED",
       403,
     );
@@ -300,7 +300,7 @@ export class AuthService {
    */
   async login(identifier: string, password: string): Promise<Models.Session> {
     throw new AppError(
-      "Portal logins and session creations are temporarily disabled due to system security maintenance.",
+      "Online registrations and portal access are officially closed. For any queries, please contact the organizing team.",
       "AUTH_UNAUTHORIZED",
       403,
     );

@@ -10,7 +10,6 @@ import {
   Eye,
   EyeOff,
   AtSign,
-  ShieldAlert,
 } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import { DEPARTMENT_OPTIONS, SEMESTER_OPTIONS } from '../../types/database.types'
@@ -63,7 +62,7 @@ export default function AuthModal() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    showToast.error('Portal access and session creation are temporarily disabled due to system security maintenance.')
+    showToast.error('Online registrations are officially closed. No further registrations will be accepted.')
     return
 
     try {
@@ -484,21 +483,21 @@ export default function AuthModal() {
               )}
             </div>
 
-              {/* Emergency Security Notice */}
-              <div className="mt-4 flex items-center gap-2 border border-red-500/50 bg-red-950/40 p-3 text-xs text-red-400">
-                <ShieldAlert size={16} className="shrink-0" />
+              {/* Official Closed Notice */}
+              <div className="mt-4 flex items-center gap-2 border border-amber-500/40 bg-amber-950/30 p-3 text-xs text-amber-300">
+                <Lock size={16} className="shrink-0" />
                 <span>
-                  Portal access and account sessions are temporarily disabled due to emergency backend security maintenance.
+                  Online registrations are officially closed. No further registrations will be accepted. For queries, please contact the organizing team.
                 </span>
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting || true}
-                className="mt-4 flex w-full items-center justify-center gap-2 border border-red-500/50 bg-red-950/40 py-3 text-xs font-black uppercase tracking-[0.18em] text-red-400 cursor-not-allowed opacity-80 shadow-[0_0_15px_rgba(239,68,68,0.15)]"
+                className="mt-4 flex w-full items-center justify-center gap-2 border border-white/15 bg-white/5 py-3 text-xs font-black uppercase tracking-[0.18em] text-slate-400 cursor-not-allowed opacity-80"
               >
-                <ShieldAlert size={16} />
-                <span>Portal Closed / Maintenance</span>
+                <Lock size={16} />
+                <span>Registrations Closed</span>
               </button>
             </form>
           </div>

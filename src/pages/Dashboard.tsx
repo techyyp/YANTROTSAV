@@ -8,7 +8,7 @@ import {
   CheckCircle2,
   XCircle,
   AlertCircle,
-  ShieldAlert,
+  Lock,
   Loader2,
   ArrowRight,
   ShieldCheck,
@@ -387,23 +387,23 @@ export default function Dashboard() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#050816] px-4 pt-20 text-white">
         <div className="relative w-full max-w-md border border-white/10 bg-[#080A0F] p-8 text-center shadow-2xl">
-          <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#00E5FF]">
-            [SECURITY ENCLAVE]
+          <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#FF6B00]">
+            [OFFICIAL ANNOUNCEMENT]
           </span>
           <h2 className="mt-2 text-2xl font-black uppercase tracking-tight text-white">
-            Participant Login Required
+            Registrations Closed
           </h2>
           <p className="mt-3 text-xs leading-relaxed text-slate-400">
-            Participant logins and session creations are temporarily suspended due to server security maintenance.
+            Online registrations are officially closed. No further registrations will be accepted. For official queries, please contact the CSE Organizing Committee.
           </p>
 
           <button
             type="button"
             disabled
-            className="mt-6 inline-flex items-center gap-2 border border-red-500/50 bg-red-950/40 px-6 py-3 font-mono text-xs font-black uppercase tracking-[0.18em] text-red-400 cursor-not-allowed opacity-85 shadow-[0_0_15px_rgba(239,68,68,0.15)]"
+            className="mt-6 inline-flex items-center gap-2 border border-white/15 bg-white/5 px-6 py-3 font-mono text-xs font-black uppercase tracking-[0.18em] text-slate-400 cursor-not-allowed opacity-80"
           >
-            <ShieldAlert size={14} />
-            <span>Portal Closed / Maintenance</span>
+            <Lock size={14} />
+            <span>Registrations Closed</span>
           </button>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, User, LogOut, ShieldAlert } from 'lucide-react'
+import { Menu, X, User, LogOut, Lock } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 import logo from "../../assets/images/logo.png";
 function Navbar() {
@@ -136,10 +136,10 @@ function Navbar() {
               <button
                 type="button"
                 disabled
-                className="flex items-center gap-2 border border-red-500/50 bg-red-950/40 px-3.5 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-red-400 cursor-not-allowed opacity-85 shadow-[0_0_10px_rgba(239,68,68,0.15)]"
+                className="flex items-center gap-2 border border-white/15 bg-white/5 px-3.5 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 cursor-not-allowed opacity-80"
               >
-                <ShieldAlert size={12} />
-                <span>Portal Closed</span>
+                <Lock size={12} />
+                <span>Registrations Closed</span>
               </button>
             )}
           </div>
@@ -219,10 +219,10 @@ function Navbar() {
               <button
                 type="button"
                 disabled
-                className="mt-5 flex w-full items-center justify-center gap-2 border border-red-500/50 bg-red-950/40 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-red-400 cursor-not-allowed opacity-85 shadow-[0_0_15px_rgba(239,68,68,0.15)]"
+                className="mt-5 flex w-full items-center justify-center gap-2 border border-white/15 bg-white/5 py-3 font-mono text-xs font-bold uppercase tracking-[0.18em] text-slate-400 cursor-not-allowed opacity-80"
               >
-                <ShieldAlert size={14} />
-                <span>Portal Closed / Maintenance</span>
+                <Lock size={14} />
+                <span>Registrations Closed</span>
               </button>
             )}
           </div>
