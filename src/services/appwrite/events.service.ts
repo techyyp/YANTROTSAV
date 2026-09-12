@@ -42,6 +42,8 @@ export class EventsService {
     );
 
     let docs = response.documents as unknown as EventDocument[];
+    // Mark status as closed for all events site-wide
+    docs = docs.map((e) => ({ ...e, status: "closed" as EventStatus }));
     if (options?.status) {
       docs = docs.filter((e) => e.status === options.status);
     }
@@ -57,8 +59,8 @@ export class EventsService {
       eventId,
     );
     const event = doc as unknown as EventDocument;
+    event.status = "closed" as EventStatus;
     event.currentRegistrations = await this.countEventOccupancy(event);
-    await this.closeEventIfWindowEnded(event, true);
     return event;
   }
 
@@ -491,36 +493,12 @@ export class EventsService {
    * Block new enrollments when the event is closed, past deadline, or at max slots.
    * Must run before creating a registration or team.
    */
-  async assertHasCapacity(event: EventDocument): Promise<void> {
-    const occupancy =
-      event.currentRegistrations ?? (await this.countEventOccupancy(event));
-    event.currentRegistrations = occupancy;
-
-    if (isEventDeadlinePassed(event)) {
-      await this.closeEventIfWindowEnded(event, true);
-      throw new AppError(
-        "Registration deadline for this event has passed.",
-        "EVENT_REGISTRATION_CLOSED",
-        400,
-      );
-    }
-    if (event.status !== "published") {
-      throw new AppError(
-        "Registration is closed for this event.",
-        "EVENT_REGISTRATION_CLOSED",
-        400,
-      );
-    }
-
-    const maxAllowed = getEventSlotLimit(event);
-    if (maxAllowed && occupancy >= maxAllowed) {
-      await this.closeEventIfWindowEnded(event, true);
-      throw new AppError(
-        "This event is completely booked. Registration is closed.",
-        "EVENT_CAPACITY_REACHED",
-        400,
-      );
-    }
+  async assertHasCapacity(_event: EventDocument): Promise<void> {
+    throw new AppError(
+      "Registrations for Yantrotsav 2026 events are now officially closed.",
+      "EVENT_REGISTRATION_CLOSED",
+      400,
+    );
   }
 
   /** Recount live occupancy after a successful enroll/cancel and auto-close when full. */
